@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-700">
-    <form action="index.php" method="post"
+    <form action="fh.inc.php" method="post"
     class="flex flex-col items-center mt-10">
         <input name="username" type="text" placeholder="Username"
         class="rounded-md m-2 py-1 px-2 outline-none">
@@ -22,7 +22,7 @@
 
             $min = 5;
             $max = 10;
-            $names = ['annahy', 'student', 'mikeos'];
+            $namesAlredyExists = ['annahy', 'student', 'mikeos'];
 
             $username = $_POST['username'];
             $password = $_POST['password'];
@@ -30,7 +30,7 @@
             if (strlen($username) < $min || strlen($username) > $max) {
                 echo '<p class="text-md mt-6 text-center text-red-500">Username has to be between ' . $min . ' - ' . $max . ' characters.<p/>';
             }
-            else if (in_array(strtolower($username), $names)) {
+            else if (in_array(strtolower($username), $namesAlredyExists)) {
                 echo '<p class="text-md mt-6 text-center text-red-500">This Username already exists.<p/>';
             }
             else {
