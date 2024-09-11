@@ -9,7 +9,7 @@
 <body class="bg-gray-900">
     <div class="flex space-x-10 justify-center mt-20">
         <div>
-            <!-- SIGN UP FORM -->
+            <!-- CREATE FORM -->
             <form action="index.php" method="post"
             class="flex flex-col items-center mt-10">
                 <input name="username" type="text" placeholder="Username" autocomplete="off"
@@ -21,13 +21,19 @@
             </form>
             <?php
                 if (isset($_POST['signup'])) {
-                    
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
-                    
                     include 'db.inc.php';
+
+                    $username = mysqli_real_escape_string($connection, $_POST['username']);
+                    $password = mysqli_real_escape_string($connection, $_POST['password']);
+
+                    // encript the password with the old old way
+                    $hashFormat = "$2y$10$";
+                    $salt = "iusesomecrazystrings22";
+                    $hashF_and_salt = $hashFormat . $salt;
+                    $encript_password = crypt($password, $hashF_and_salt);
+                    
                     if ($connection) {
-                        $insertQuery = "INSERT INTO users (username, password) VALUES ('$username','$password');";
+                        $insertQuery = "INSERT INTO users (username, password) VALUES ('$username','$encript_password');";
                         $result = mysqli_query($connection, $insertQuery);
                         if (!$result) {
                             die('<p>Query failed! ' . mysqli_error($connection) . '<p/>');
@@ -66,11 +72,14 @@
             <?php
                 if (isset($_POST['update'])) {
                     include 'db.inc.php';
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
+                    
+                    $username = mysqli_real_escape_string($connection, $_POST['username']);
+                    $password = mysqli_real_escape_string($connection, $_POST['password']);
                     $id = $_POST['id'];
+
                     $updateQuery = "UPDATE users SET username='$username',password='$password' WHERE id='$id';";
                     $result = mysqli_query($connection, $updateQuery);
+
                     if (!$result) {
                         die("Query Failed!" . mysqli_error($connection));
                     } else {
@@ -104,15 +113,18 @@
             <?php
                 if (isset($_POST['delete'])) {
                     include 'db.inc.php';
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
+                    
+                    $username = mysqli_real_escape_string($connection, $_POST['username']);
+                    $password = mysqli_real_escape_string($connection, $_POST['password']);
                     $id = $_POST['id'];
-                    $updateQuery = "UPDATE users SET username='$username',password='$password' WHERE id='$id';";
-                    $result = mysqli_query($connection, $updateQuery);
+
+                    $deleteQuery = "DELETE FROM users WHERE id='$id';";
+                    $result = mysqli_query($connection, $deleteQuery);
+
                     if (!$result) {
                         die("Query Failed!" . mysqli_error($connection));
                     } else {
-                        echo '<p class="text-lg text-emerald-500 font-bold text-center mt-10">Your information has been updated!<p/>';
+                        echo '<p class="text-lg text-amber-500 font-bold text-center mt-10">Your account has been deleted!<p/>';
                     }
                 }
             ?>
