@@ -31,9 +31,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydb
       MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: user
     volumes:
-      - db_data:/var/lib/mysql
+      - studies_db_data:/var/lib/mysql
     networks:
       - app-network
 
@@ -55,4 +55,4 @@ networks:
     driver: bridge
 
 volumes:
-  db_data:
+  studies_db_data:
